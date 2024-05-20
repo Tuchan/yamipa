@@ -1,11 +1,10 @@
 package io.josemmo.bukkit.plugin.utils;
 
 import com.comphenix.protocol.ProtocolLibrary;
+import com.github.Anon8281.universalScheduler.scheduling.tasks.MyScheduledTask;
 import io.josemmo.bukkit.plugin.YamipaPlugin;
 import io.josemmo.bukkit.plugin.packets.ActionBarPacket;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 public class ActionBar {
@@ -13,7 +12,7 @@ public class ActionBar {
     private static final YamipaPlugin plugin = YamipaPlugin.getInstance();
     private final Player player;
     private String message;
-    private BukkitTask task = null;
+    private MyScheduledTask task = null;
 
     private ActionBar(@NotNull Player player, @NotNull String message) {
         this.player = player;
@@ -83,7 +82,7 @@ public class ActionBar {
      */
     public ActionBar start() {
         if (task == null) {
-            task = Bukkit.getScheduler().runTaskTimer(plugin, this::sendOnce, 0L, 40L);
+            task = YamipaPlugin.getInstance().getScheduler().runTaskTimer(this::sendOnce, 0L, 40L);
         }
         return this;
     }

@@ -160,7 +160,7 @@ public class ImageCommand {
         // Download and validate remote file
         final URL finalUrl = url;
         final String finalReferrer = referrer;
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        YamipaPlugin.getInstance().getScheduler().runTaskAsynchronously(() -> {
             try {
                 URLConnection conn = finalUrl.openConnection();
                 PluginDescriptionFile desc = plugin.getDescription();

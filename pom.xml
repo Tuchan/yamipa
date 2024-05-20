@@ -46,6 +46,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://github.com/PaperMC/Folia -->
+        <dependency>
+            <groupId>dev.folia</groupId>
+            <artifactId>folia-api</artifactId>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- https://repo.dmulloy2.net/service/rest/repository/browse/public/com/comphenix/protocol/ProtocolLib/ -->
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
@@ -123,6 +131,14 @@
             <artifactId>annotations</artifactId>
             <version>24.1.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- https://github.com/Anon8281/UniversalScheduler -->
+        <dependency>
+            <groupId>com.github.Anon8281</groupId>
+            <artifactId>UniversalScheduler</artifactId>
+            <version>0.1.6</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

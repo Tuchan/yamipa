@@ -1,6 +1,7 @@
 package io.josemmo.bukkit.plugin.renderer;
 
 import com.comphenix.protocol.events.PacketContainer;
+import com.github.Anon8281.universalScheduler.scheduling.tasks.MyScheduledTask;
 import io.josemmo.bukkit.plugin.YamipaPlugin;
 import io.josemmo.bukkit.plugin.storage.CachedMapsFile;
 import io.josemmo.bukkit.plugin.storage.ImageFile;
@@ -19,8 +20,6 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 public class FakeImage extends FakeEntity {
@@ -61,7 +60,7 @@ public class FakeImage extends FakeEntity {
     private int numOfSteps = -1;  // Total number of animation steps
 
     // Animation task attributes
-    private @Nullable ScheduledFuture<?> task;
+    private @Nullable MyScheduledTask task;
     private int currentStep = -1; // Current animation step
 
     /**
@@ -389,11 +388,10 @@ public class FakeImage extends FakeEntity {
         YamipaPlugin plugin = YamipaPlugin.getInstance();
         boolean isAnimationEnabled = plugin.getRenderer().isAnimationEnabled();
         if (isAnimationEnabled && task == null && hasFlag(FLAG_ANIMATABLE) && numOfSteps > 1) {
-            task = plugin.getScheduler().scheduleAtFixedRate(
+            task = YamipaPlugin.getInstance().getScheduler().runTaskTimer(
                 this::nextStep,
                 0,
-                delay*50L,
-                TimeUnit.MILLISECONDS
+                delay
             );
             LOGGER.fine("Spawned animation task for FakeImage#(" + location + "," + face + ")");
         }
@@ -524,7 +522,7 @@ public class FakeImage extends FakeEntity {
     private void invalidate() {
         // Destroy animation task
         if (task != null) {
-            task.cancel(true);
+            task.cancel();
             task = null;
             currentStep = -1;
             LOGGER.fine("Destroyed animation task for FakeImage#(" + location + "," + face + ")");

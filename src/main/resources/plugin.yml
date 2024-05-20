@@ -3,6 +3,7 @@ version: ${project.version}
 main: io.josemmo.bukkit.plugin.YamipaPlugin
 api-version: 1.16
 depend: [ProtocolLib]
+folia-supported: true
 softdepend:
   - GriefPrevention
   - GroupManager

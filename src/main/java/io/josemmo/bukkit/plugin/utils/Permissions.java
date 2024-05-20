@@ -160,7 +160,7 @@ public class Permissions {
         try {
             return Bukkit.isPrimaryThread() ?
                 canEditCallable.call() :
-                Bukkit.getScheduler().callSyncMethod(plugin, canEditCallable).get();
+                YamipaPlugin.getInstance().getScheduler().callSyncMethod(canEditCallable).get();
         } catch (Exception e) {
             LOGGER.severe("Failed to get player permissions from GriefPrevention", e);
             return false;

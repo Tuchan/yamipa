@@ -1,5 +1,6 @@
 package io.josemmo.bukkit.plugin.renderer;
 
+import com.github.Anon8281.universalScheduler.scheduling.tasks.MyScheduledTask;
 import io.josemmo.bukkit.plugin.YamipaPlugin;
 import io.josemmo.bukkit.plugin.utils.CsvConfiguration;
 import io.josemmo.bukkit.plugin.utils.Logger;
@@ -13,7 +14,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class ImageRenderer implements Listener {
     private final Path configPath;
     private final boolean animateImages;
     private final int maxImageDimension;
-    private BukkitTask saveTask;
+    private MyScheduledTask saveTask;
     private final AtomicBoolean hasConfigChanged = new AtomicBoolean(false);
     private final ConcurrentMap<WorldAreaId, Set<FakeImage>> images = new ConcurrentHashMap<>();
     private final ConcurrentMap<UUID, Integer> imagesCountByPlayer = new ConcurrentHashMap<>();
@@ -72,7 +72,7 @@ public class ImageRenderer implements Listener {
         loadConfig();
         YamipaPlugin plugin = YamipaPlugin.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        saveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::saveConfig, SAVE_INTERVAL, SAVE_INTERVAL);
+        saveTask = YamipaPlugin.getInstance().getScheduler().runTaskTimerAsynchronously(this::saveConfig, SAVE_INTERVAL, SAVE_INTERVAL);
     }
 
     /**
@@ -452,8 +452,7 @@ public class ImageRenderer implements Listener {
 
         // Wait until next server tick before handling location change
         // This is necessary as teleport events get fired *before* teleporting the player
-        YamipaPlugin plugin = YamipaPlugin.getInstance();
-        Bukkit.getScheduler().runTask(plugin, () -> onPlayerLocationChange(event.getPlayer(), event.getTo()));
+        YamipaPlugin.getInstance().getScheduler().runTask(() -> onPlayerLocationChange(event.getPlayer(), event.getTo()));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

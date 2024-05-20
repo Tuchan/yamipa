@@ -1,12 +1,13 @@
 package io.josemmo.bukkit.plugin;
 
+import com.github.Anon8281.universalScheduler.UniversalScheduler;
+import com.github.Anon8281.universalScheduler.scheduling.schedulers.TaskScheduler;
 import io.josemmo.bukkit.plugin.commands.ImageCommandBridge;
 import io.josemmo.bukkit.plugin.renderer.*;
 import io.josemmo.bukkit.plugin.storage.ImageStorage;
 import io.josemmo.bukkit.plugin.utils.Logger;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,7 @@ public class YamipaPlugin extends JavaPlugin {
     private @Nullable ImageRenderer renderer;
     private @Nullable ItemService itemService;
     private @Nullable ScheduledExecutorService scheduler;
+    private static TaskScheduler universalScheduler;
     private @Nullable Metrics metrics;
 
     /**
@@ -60,9 +62,9 @@ public class YamipaPlugin extends JavaPlugin {
      * Get internal tasks scheduler
      * @return Tasks scheduler
      */
-    public @NotNull ScheduledExecutorService getScheduler() {
-        Objects.requireNonNull(scheduler, "Cannot get scheduler instance if plugin is not running");
-        return scheduler;
+    public @NotNull TaskScheduler getScheduler() {
+        Objects.requireNonNull(universalScheduler, "Cannot get scheduler instance if plugin is not running");
+        return universalScheduler;
     }
 
     /**
@@ -85,6 +87,9 @@ public class YamipaPlugin extends JavaPlugin {
         if (verbose) {
             LOGGER.info("Running on VERBOSE mode");
         }
+
+        // Initialize universal scheduler
+        universalScheduler = UniversalScheduler.getScheduler(this);
 
         // Register plugin commands
         ImageCommandBridge.register(this);
@@ -180,7 +185,7 @@ public class YamipaPlugin extends JavaPlugin {
 
         // Remove Bukkit listeners and tasks
         HandlerList.unregisterAll(this);
-        Bukkit.getScheduler().cancelTasks(this);
+        getScheduler().cancelTasks(this);
 
         // Unlink reference to instance
         INSTANCE = null;

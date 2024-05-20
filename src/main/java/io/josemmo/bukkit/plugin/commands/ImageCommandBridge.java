@@ -8,7 +8,6 @@ import io.josemmo.bukkit.plugin.renderer.FakeImage;
 import io.josemmo.bukkit.plugin.storage.ImageFile;
 import io.josemmo.bukkit.plugin.utils.Internals;
 import io.josemmo.bukkit.plugin.utils.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -47,7 +46,7 @@ public class ImageCommandBridge {
         LOGGER.fine("Registered plugin command and aliases");
 
         // Fix "minecraft.command.*" permissions
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+        YamipaPlugin.getInstance().getScheduler().runTask(() -> {
             fixPermissions(COMMAND_NAME);
             for (String alias : COMMAND_ALIASES) {
                 fixPermissions(alias);
